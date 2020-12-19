@@ -1,11 +1,10 @@
+# Imports
+
 import praw
 import json
 from kafka import KafkaProducer
 
-#import logging
-#logging.basicConfig(level=logging.DEBUG)
-
-# Reddit connection settings.
+# Reddit connection settings
 
 client_id = "H38kFWwxAhzgog"
 client_secret = "jeqLjICH9n5bPTxtQAspIHp2K79TQQ"
@@ -21,7 +20,6 @@ reddit = praw.Reddit(
 
 bootstrap_servers = ['2_kafka_posts:19091']
 topicName = 'posts'
-
 
 producer = KafkaProducer(bootstrap_servers = bootstrap_servers)
 
