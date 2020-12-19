@@ -1,0 +1,5 @@
+version: '3'
+services:
+  1_python_posts:
+    build: ./
+    command: python 1_python_posts.py

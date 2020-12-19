@@ -25,7 +25,7 @@ producer = KafkaProducer(bootstrap_servers = bootstrap_servers)
 
 for submission in reddit.subreddit("changemyview").stream.submissions():
 	try:
-		redditJson = json.dumps({"Title": submission.title, "Id": submission.id, "Author": submission.author.name, "content": submission.selftext, "score": submission.score}).encode('utf-8')
+		redditJson = json.dumps({"Title": submission.title, "Id": submission.id, "Author": submission.author.name, "content": submission.selftext, "score": submission.score, "over_18": submission.over_18, "link_flair_text": submission.link_flair_text}).encode('utf-8')
 		producer.send(topicName, redditJson)
 	except:
 		print("Fetch failed.")

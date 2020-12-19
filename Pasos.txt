@@ -1,0 +1,6 @@
+2kafkaposts:
+	docker-compose up -d
+	docker exec -it 2_kafka_posts_kafkaposts_1 kafka-topics --zookeeper zookeeper:2181 --create --topic posts --partitions 1 --replication-factor 1
+
+1pythonposts:
+	docker-compose up --build
