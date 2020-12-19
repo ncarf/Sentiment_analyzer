@@ -65,3 +65,8 @@ services:
       - ./data/4_kafka_proclenguaje/data:/var/lib/kafka/data
     depends_on:
       - zookeeper
+
+  5_python_analysis:
+    build: ./
+    command: python 5_python_analysis.py
+    restart: on-failure

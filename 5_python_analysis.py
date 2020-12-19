@@ -1,5 +1,6 @@
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from kafka import KafkaConsumer
+import json
 
 
 analyzer = SentimentIntensityAnalyzer()
@@ -31,11 +32,19 @@ for sentence in sentences:
     print("{:-<65} {}".format(sentence, str(vs)))
 '''
 
-bootstrap_servers = ['localhost:9091']
-topicName = 'processed_posts'   # Bound to change.
+# Kafka consumer connection settings
 
-consumer = KafkaConsumer(topicName, bootstrap_servers)
+bootstrap_servers_consumer = ['4_kafka_proclenguaje:19092']
+consumerTopicName = 'proclenguaje'
 
-for text in consumer:
+consumer = KafkaConsumer(consumerTopicName, bootstrap_servers = bootstrap_servers_consumer)
+
+for message in consumer:
+
+
+    # Obtain text from Json.
+    messageJson = json.loads(message.value)
+    text = messageJson['Texto']
+
+    # Obtain analytics.
     rs = analyzer.polarity_scores(text)
-    print(rs['compound'])

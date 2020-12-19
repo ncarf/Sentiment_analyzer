@@ -14,7 +14,6 @@ def esStopword(palabra):
 
 # Imports
 
-import praw
 import json
 from kafka import KafkaConsumer
 from kafka import KafkaProducer
