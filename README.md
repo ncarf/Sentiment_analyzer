@@ -1,5 +1,11 @@
-#Reddit en un stream
-##Entrega 2: Prueba de concepto
+**REDDIT EN UN STREAM**
+
+**Entrega 2: Prueba de concepto**
+
+Integrantes:
+- Nicolás Cárcamo
+- Carlos Henríquez
+- Mateo Sepúlveda
 
 Teniendo instalado Docker, ejecutar el siguiente comando en la terminal desde el directorio donde están los archivos descargados del repositorio:
 
