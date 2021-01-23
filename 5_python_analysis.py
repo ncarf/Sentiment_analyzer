@@ -1,36 +1,47 @@
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from kafka import KafkaConsumer
+from psycopg2 import connect
 import json
 
 
 analyzer = SentimentIntensityAnalyzer()
 
-'''
-sentences = ["VADER is smart, handsome, and funny.",  # positive sentence example
-             "VADER is smart, handsome, and funny!",  # punctuation emphasis handled correctly (sentiment intensity adjusted)
-             "VADER is very smart, handsome, and funny.", # booster words handled correctly (sentiment intensity adjusted)
-             "VADER is VERY SMART, handsome, and FUNNY.",  # emphasis for ALLCAPS handled
-             "VADER is VERY SMART, handsome, and FUNNY!!!", # combination of signals - VADER appropriately adjusts intensity
-             "VADER is VERY SMART, uber handsome, and FRIGGIN FUNNY!!!", # booster words & punctuation make this close to ceiling for score
-             "VADER is not smart, handsome, nor funny.",  # negation sentence example
-             "The book was good.",  # positive sentence
-             "At least it isn't a horrible book.",  # negated negative sentence with contraction
-             "The book was only kind of good.", # qualified positive sentence is handled correctly (intensity adjusted)
-             "The plot was good, but the characters are uncompelling and the dialog is not great.", # mixed negation sentence
-             "Today SUX!",  # negative slang with capitalization emphasis
-             "Today only kinda sux! But I'll get by, lol", # mixed sentiment example with slang and constrastive conjunction "but"
-             "Make sure you :) or :D today!",  # emoticons handled
-             "Catch utf-8 emoji such as such as 💘 and 💋 and 😁",  # emojis handled
-             "Not bad at all"  # Capitalized negation
-             ]
 
+# Postgresql connection settings
 
+dbName = "sentiment_analyzer"
+username = "postgres"
+pwd = "secret"
+address = "postgresql"
 
+conn = connect(
+    dbname = dbName,
+    user = username,
+    host = address,
+    password = pwd
+)
 
-for sentence in sentences:
-    vs = analyzer.polarity_scores(sentence)
-    print("{:-<65} {}".format(sentence, str(vs)))
-'''
+cursor = conn.cursor()
+
+# Postgresql table creation
+
+create_table_query = '''CREATE TABLE IF NOT EXISTS stored_posts
+          (ID  VARCHAR  PRIMARY KEY  NOT NULL,
+          TEXTO  TEXT  NOT NULL,
+          MAYUSCULAS  INT  NOT NULL,
+          MINUSCULAS  INT  NOT NULL,
+          VOCALES  INT  NOT NULL,
+          CONSONANTES  INT  NOT NULL,
+          PALABRAS  INT  NOT NULL,
+          STOPWORDS  INT  NOT NULL,
+          POLARIDAD  REAL  NOT NULL); '''
+
+# Execute a command: this creates a new table
+
+cursor.execute(create_table_query)
+conn.commit()
+print("Table created successfully in PostgreSQL ")
+
 
 # Kafka consumer connection settings
 
@@ -42,9 +53,25 @@ consumer = KafkaConsumer(consumerTopicName, bootstrap_servers = bootstrap_server
 for message in consumer:
 
 
-    # Obtain text from Json.
+    # Obtain data from Json.
     messageJson = json.loads(message.value)
+    pk = messageJson['Id']
     text = messageJson['Texto']
+    capital = messageJson['Mayusculas']
+    nonCapital = messageJson['Minusculas']
+    vowels = messageJson['Vocales']
+    consonants = messageJson['Consonantes']
+    words = messageJson['Palabras']
+    stopwords = messageJson['Stopwords']
 
     # Obtain analytics.
     rs = analyzer.polarity_scores(text)
+
+    cursor.execute("INSERT INTO stored_posts (id, texto, mayusculas, minusculas, vocales, consonantes, palabras, stopwords, polaridad) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);",
+    (pk, text, capital, nonCapital, vowels, consonants, words, stopwords, rs['compound']))
+
+    conn.commit()
+
+
+cursor.close()
+conn.close()

@@ -14,6 +14,18 @@ services:
       - ./data/zookeeper/data:/data
       - ./data/zookeeper/datalog:/datalog
 
+  postgresql:
+    image: 'bitnami/postgresql:12'
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'postgresql_data_12:/bitnami/postgresql12'
+    environment:
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=secret
+      - POSTGRESQL_DATABASE=sentiment_analyzer
+      - ALLOW_EMPTY_PASSWORD=yes
+
   1_python_posts:
     build: ./
     depends_on:
@@ -70,3 +82,7 @@ services:
     build: ./
     command: python 5_python_analysis.py
     restart: on-failure
+
+volumes:
+  postgresql_data_12:
+    driver: local

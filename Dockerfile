@@ -10,4 +10,5 @@ COPY ./5_python_analysis.py /usr/src/app
 
 RUN pip install praw && \
 	pip install kafka-python && \
-	pip install vaderSentiment
+	pip install vaderSentiment && \
+	pip install psycopg2
