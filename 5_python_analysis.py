@@ -27,7 +27,6 @@ cursor = conn.cursor()
 
 create_table_query = '''CREATE TABLE IF NOT EXISTS stored_posts
           (ID  VARCHAR  PRIMARY KEY  NOT NULL,
-          TEXTO  TEXT  NOT NULL,
           MAYUSCULAS  INT  NOT NULL,
           MINUSCULAS  INT  NOT NULL,
           VOCALES  INT  NOT NULL,
@@ -67,8 +66,8 @@ for message in consumer:
     # Obtain analytics.
     rs = analyzer.polarity_scores(text)
 
-    cursor.execute("INSERT INTO stored_posts (id, texto, mayusculas, minusculas, vocales, consonantes, palabras, stopwords, polaridad) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);",
-    (pk, text, capital, nonCapital, vowels, consonants, words, stopwords, rs['compound']))
+    cursor.execute("INSERT INTO stored_posts (id, mayusculas, minusculas, vocales, consonantes, palabras, stopwords, polaridad) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);",
+    (pk, capital, nonCapital, vowels, consonants, words, stopwords, rs['compound']))
 
     conn.commit()
 
