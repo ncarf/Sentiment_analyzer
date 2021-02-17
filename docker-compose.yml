@@ -26,10 +26,24 @@ services:
       - POSTGRESQL_DATABASE=sentiment_analyzer
       - ALLOW_EMPTY_PASSWORD=yes
 
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_DATABASE=sentiment_analyzer
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    volumes:
+      - 'mongodb_data_container:/data/db'
+    restart: on-failure
+    
   1_python_posts:
     build: ./
     depends_on:
       - 2_kafka_posts
+    volumes:
+      - ./:/usr/src/app
     command: python 1_python_posts.py
     restart: on-failure
 
@@ -56,6 +70,8 @@ services:
     build: ./
     depends_on:
       - 4_kafka_proclenguaje
+    volumes:
+      - ./:/usr/src/app
     command: python 3_python_proclenguaje.py
     restart: on-failure
 
@@ -80,9 +96,13 @@ services:
 
   5_python_analysis:
     build: ./
+    volumes:
+      - ./:/usr/src/app
     command: python 5_python_analysis.py
     restart: on-failure
 
 volumes:
   postgresql_data_12:
+    driver: local
+  mongodb_data_container:
     driver: local

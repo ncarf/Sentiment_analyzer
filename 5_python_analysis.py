@@ -66,7 +66,7 @@ for message in consumer:
     # Obtain analytics.
     rs = analyzer.polarity_scores(text)
 
-    cursor.execute("INSERT INTO stored_posts (id, mayusculas, minusculas, vocales, consonantes, palabras, stopwords, polaridad) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);",
+    cursor.execute("INSERT INTO stored_posts (id, mayusculas, minusculas, vocales, consonantes, palabras, stopwords, polaridad) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING;",
     (pk, capital, nonCapital, vowels, consonants, words, stopwords, rs['compound']))
 
     conn.commit()
