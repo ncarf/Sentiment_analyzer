@@ -1,6 +1,5 @@
 version: '3'
 services:
-
   zookeeper:
     image: zookeeper:3.4.9
     hostname: zookeeper
@@ -100,6 +99,11 @@ services:
       - ./:/usr/src/app
     command: python 5_python_analysis.py
     restart: on-failure
+
+  spring_backend:
+    build: ./spring_backend/
+    ports:
+      - "8080:8080"
 
 volumes:
   postgresql_data_12:
