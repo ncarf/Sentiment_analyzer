@@ -105,6 +105,15 @@ services:
     ports:
       - "8080:8080"
 
+  vue-frontend:
+    image: node:12
+    working_dir: /app
+    volumes:
+      - ./vue-frontend:/app
+    ports:
+      - "8081:8081"
+    command: sh -c "npm install && npm run serve"
+
 volumes:
   postgresql_data_12:
     driver: local
