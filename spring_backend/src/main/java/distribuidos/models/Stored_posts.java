@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Stored_posts {
 
     private String redditId;
+    private String titulo;
     private String texto;
     private String autor;
     private int puntaje;
@@ -13,12 +14,21 @@ public class Stored_posts {
     public Stored_posts() {
     }
 
-    public Stored_posts(String redditId, String texto, String autor, int puntaje, ArrayList<String> flairs) {
+    public Stored_posts(String redditId, String titulo, String texto, String autor, int puntaje, ArrayList<String> flairs) {
         this.redditId = redditId;
+        this.titulo = titulo;
         this.texto = texto;
         this.autor = autor;
         this.puntaje = puntaje;
         this.flairs = flairs;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     public String getRedditId() {

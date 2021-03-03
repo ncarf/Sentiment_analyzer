@@ -42,7 +42,7 @@ for submission in reddit.subreddit("changemyview").stream.submissions():
 		redditJson = json.dumps({"Title": submission.title, "Id": submission.id, "Author": submission.author.name, "content": submission.selftext, "score": submission.score, "over_18": submission.over_18, "link_flair_text": submission.link_flair_text}).encode('utf-8')
 		producer.send(topicName, redditJson)
 
-		post = {"redditId": submission.id, "texto": submission.selftext, "autor": submission.author.name, "puntaje": submission.score, "flairs": submission.link_flair_text}
+		post = {"redditId": submission.id, "titulo": submission.title, "texto": submission.selftext, "autor": submission.author.name, "puntaje": submission.score, "flairs": submission.link_flair_text}
 		x = coll.insert_one(post)
 	except:
 		print("Fetch failed.")

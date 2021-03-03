@@ -14,15 +14,18 @@ public class Complete_post {
     private int stopwords;
     private float polarity;
 
+    private String titulo;
     private String texto;
     private String autor;
     private int puntaje;
     private ArrayList<String> flairs;
 
+
+
     public Complete_post() {
     }
 
-    public Complete_post(String redditId, int upperCase, int lowerCase, int vowels, int consonants, int words, int stopwords, float polarity, String texto, String autor, int puntaje, ArrayList<String> flairs) {
+    public Complete_post(String redditId, int upperCase, int lowerCase, int vowels, int consonants, int words, int stopwords, float polarity, String titulo, String texto, String autor, int puntaje, ArrayList<String> flairs) {
         this.redditId = redditId;
         this.upperCase = upperCase;
         this.lowerCase = lowerCase;
@@ -31,6 +34,7 @@ public class Complete_post {
         this.words = words;
         this.stopwords = stopwords;
         this.polarity = polarity;
+        this.titulo = titulo;
         this.texto = texto;
         this.autor = autor;
         this.puntaje = puntaje;
@@ -40,6 +44,7 @@ public class Complete_post {
     public void build(Post_stats postgres, Stored_posts mongo)
     {
         this.redditId = mongo.getRedditId();
+        this.titulo = mongo.getTitulo();
         this.texto = mongo.getTexto();
         this.autor = mongo.getAutor();
         this.puntaje = mongo.getPuntaje();
@@ -148,5 +153,13 @@ public class Complete_post {
 
     public void setFlairs(ArrayList<String> flairs) {
         this.flairs = flairs;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 }
